@@ -19,7 +19,7 @@ public class AddInstruction extends Instruction {
 	public static final String OP_CODE = "add";
 
 	/**
-	 * Constructor: an instruction to add the values in two registers
+	 * Constructor: an instruction to add the values in two registers.
 	 *
 	 * @param label optional label (can be null)
 	 * @param result the register to store the result in
