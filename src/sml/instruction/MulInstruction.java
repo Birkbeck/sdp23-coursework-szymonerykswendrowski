@@ -8,6 +8,7 @@ import sml.RegisterName;
 
 /**
  * Represents a multiply instruction.
+ *
  * @author Szymon Swendrowski
  */
 
@@ -36,6 +37,8 @@ public class MulInstruction extends Instruction {
     }
 
     /**
+     * Executes the multiply instruction in the given machine.
+     *
      * @param m the machine the multiply instruction runs on
      * @return NORMAL_PROGRAM_COUNTER_UPDATE to indicate that
      *          the instruction with the next address is to be executed
@@ -55,6 +58,7 @@ public class MulInstruction extends Instruction {
 
     /**
      * Computes the string representation of the multiply instruction.
+     *
      * @return the string representation of the multiply instruction
      */
     @Override

@@ -35,6 +35,8 @@ public class SubInstruction extends Instruction {
     }
 
     /**
+     * Executes the subtract instruction in the given machine.
+     *
      * @param m the machine the subtract instruction runs on
      * @return NORMAL_PROGRAM_COUNTER_UPDATE to indicate that
      *          the instruction with the next address is to be executed
@@ -53,9 +55,9 @@ public class SubInstruction extends Instruction {
     }
 
     /**
-     * Computes the string representation of the add instruction.
+     * Computes the string representation of the subtract instruction.
      *
-     * @return the string representation of the add instruction
+     * @return the string representation of the subtract instruction
      */
     @Override
     public String toString() {
