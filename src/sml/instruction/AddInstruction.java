@@ -13,10 +13,9 @@ import sml.RegisterName;
  */
 
 public class AddInstruction extends Instruction {
+	public static final String OP_CODE = "add";
 	private final RegisterName result;
 	private final RegisterName source;
-
-	public static final String OP_CODE = "add";
 
 	/**
 	 * Constructor: an instruction to add the values in two registers.
@@ -29,6 +28,11 @@ public class AddInstruction extends Instruction {
 		super(label, OP_CODE);
 		this.result = result;
 		this.source = source;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return false;
 	}
 
 	/**
@@ -46,6 +50,11 @@ public class AddInstruction extends Instruction {
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
+	@Override
+	public int hashCode() {
+		return 0;
+	}
+
 	/**
 	 * Computes the string representation of the add instruction.
 	 *
@@ -54,15 +63,5 @@ public class AddInstruction extends Instruction {
 	@Override
 	public String toString() {
 		return getLabelString() + getOpcode() + " " + result + " " + source;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return 0;
 	}
 }

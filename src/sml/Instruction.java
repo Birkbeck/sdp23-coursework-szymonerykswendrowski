@@ -6,6 +6,7 @@ package sml;
  * @author Szymon Swendrowski
  */
 public abstract class Instruction {
+	public static int NORMAL_PROGRAM_COUNTER_UPDATE = -1;
 	protected final String label;
 	protected final String opcode;
 
@@ -22,24 +23,13 @@ public abstract class Instruction {
 	}
 
 	/**
-	 * Gets the label of the instruction.
+	 * Compares the instruction to the specified object.
 	 *
-	 * @return label of the instruction
+	 * @param o the reference object to which the instruction is to be compared
 	 */
-	public String getLabel() {
-		return label;
-	}
+	@Override
+	public abstract boolean equals(Object o);
 
-	/**
-	 * Gets the opcode of the instruction.
-	 *
-	 * @return opcode of the instruction
-	 */
-	public String getOpcode() {
-		return opcode;
-	}
-
-	public static int NORMAL_PROGRAM_COUNTER_UPDATE = -1;
 
 	/**
 	 * Executes the instruction in the given machine.
@@ -49,8 +39,16 @@ public abstract class Instruction {
 	 *          or NORMAL_PROGRAM_COUNTER_UPDATE to indicate that
 	 *          the instruction with the next address is to be executed
 	 */
-
 	public abstract int execute(Machine machine);
+
+	/**
+	 * Gets the label of the instruction.
+	 *
+	 * @return label of the instruction
+	 */
+	public String getLabel() {
+		return label;
+	}
 
 	/**
 	 * Gets the label of the instruction.
@@ -62,23 +60,14 @@ public abstract class Instruction {
 		return (getLabel() == null) ? "" : getLabel() + ": ";
 	}
 
-	// The method is declared abstract meaning that it must be implemented by a subclass
-	// (unless the subclass is abstract), but it is not implemented here in its declaration.
-
 	/**
-	 * Computes the string representation of the instruction.
-	 */
-	@Override
-	public abstract String toString();
-
-	/**
-	 * Compares the instruction to the specified object.
+	 * Gets the opcode of the instruction.
 	 *
-	 * @param o the reference object to which the instruction is to be compared
+	 * @return opcode of the instruction
 	 */
-
-	@Override
-	public abstract boolean equals(Object o);
+	public String getOpcode() {
+		return opcode;
+	}
 
 	/**
 	 * Computes the hash values of the instruction.
@@ -87,4 +76,12 @@ public abstract class Instruction {
 	 */
 	@Override
 	public abstract int hashCode();
+
+	// The method below is declared abstract meaning that it must be implemented by a subclass
+	// (unless the subclass is abstract), but it is not implemented here in its declaration.
+	/**
+	 * Computes the string representation of the instruction.
+	 */
+	@Override
+	public abstract String toString();
 }

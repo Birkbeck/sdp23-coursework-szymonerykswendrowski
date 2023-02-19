@@ -1,6 +1,10 @@
-package sml;
+package sml.instruction;
 
 // TODO: write a JavaDoc for the class
+
+import sml.Instruction;
+import sml.Machine;
+import sml.RegisterName;
 
 /**
  * Represents a subtract instruction.
@@ -8,10 +12,9 @@ package sml;
  * @author Szymon Swendrowski
  */
 public class SubInstruction extends Instruction {
+    public static final String OP_CODE = "sub";
     private final RegisterName result;
     private final RegisterName source;
-
-    public static final String OP_CODE = "sub";
 
     /**
      * Constructor: an instruction to subtract the values in two registers.
@@ -24,6 +27,11 @@ public class SubInstruction extends Instruction {
         super(label, OP_CODE);
         this.result = result;
         this.source = source;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return false;
     }
 
     /**
@@ -39,6 +47,11 @@ public class SubInstruction extends Instruction {
         return NORMAL_PROGRAM_COUNTER_UPDATE;
     }
 
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
     /**
      * Computes the string representation of the add instruction.
      *
@@ -47,15 +60,5 @@ public class SubInstruction extends Instruction {
     @Override
     public String toString() {
         return getLabelString() + getOpcode() + " " + result + " " + source;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
     }
 }
