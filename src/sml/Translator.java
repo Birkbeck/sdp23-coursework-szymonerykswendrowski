@@ -91,6 +91,11 @@ public final class Translator {
                 return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
             }
 
+            case OutInstruction.OP_CODE -> {
+                String s = scan();
+                return new OutInstruction(label, Register.valueOf(s));
+            }
+
             // TODO: add code for all other types of instructions
 
             // TODO: Then, replace the switch by using the Reflection API
