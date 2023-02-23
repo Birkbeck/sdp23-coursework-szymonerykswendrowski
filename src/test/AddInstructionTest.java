@@ -1,4 +1,4 @@
-package sml.instruction;
+package test;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
+import sml.instruction.AddInstruction;
 
 import static sml.Registers.Register.*;
 
