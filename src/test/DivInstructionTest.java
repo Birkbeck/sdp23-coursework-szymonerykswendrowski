@@ -10,23 +10,31 @@ import sml.Machine;
 import sml.Registers;
 import sml.instruction.DivInstruction;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static sml.Registers.Register.*;
 
 class DivInstructionTest {
     private Machine machine;
     private Registers registers;
 
+    // Setting up streams to capture output
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
     @BeforeEach
     void setUp() {
         machine = new Machine(new Registers());
         registers = machine.getRegisters();
-        //...
+        System.setOut(new PrintStream(outContent));
     }
 
     @AfterEach
     void tearDown() {
         machine = null;
         registers = null;
+        System.setOut(originalOut);
     }
 
     @Test
@@ -35,6 +43,8 @@ class DivInstructionTest {
         registers.set(EBX, 0);
         Instruction instruction = new DivInstruction(null, EAX, EBX);
         instruction.execute(machine);
+        Assertions.assertEquals("Error: Division by zero, " +
+                "value of result register won't change", outContent.toString());
         Assertions.assertEquals(2, machine.getRegisters().get(EAX));
     }
 
