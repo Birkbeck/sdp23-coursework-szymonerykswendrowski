@@ -18,6 +18,7 @@ import static sml.Registers.Register.EAX;
 class OutInstructionTest {
     private Machine machine;
     private Registers registers;
+
     // Setting up streams to capture output
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
