@@ -45,7 +45,11 @@ public class DivInstruction extends Instruction {
     public int execute(Machine m) {
         int value1 = m.getRegisters().get(result);
         int value2 = m.getRegisters().get(source);
-        m.getRegisters().set(result, value1 / value2);
+        try { m.getRegisters().set(result, value1 / value2); }
+        catch (ArithmeticException e) {
+            System.out.println("Error: Division by zero, " +
+                    "value of result register won't change");
+        }
         return NORMAL_PROGRAM_COUNTER_UPDATE;
     }
 
