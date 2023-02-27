@@ -1,10 +1,10 @@
 package sml.instruction;
 
-// TODO: write a JavaDoc for the class
-
 import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
+
+import java.util.Objects;
 
 /**
  * Represents a subtract instruction.
@@ -29,8 +29,19 @@ public class SubInstruction extends Instruction {
         this.source = source;
     }
 
+    /**
+     * Returns true if the given object is a subtract instruction with
+     * the same result and source registers.
+     *
+     * @param o object to compare
+     * @return True or False
+     */
     @Override
     public boolean equals(Object o) {
+        if (o instanceof SubInstruction other) {
+            return Objects.equals(result, other.result)
+                    && Objects.equals(source, other.source);
+        }
         return false;
     }
 
@@ -49,9 +60,14 @@ public class SubInstruction extends Instruction {
         return NORMAL_PROGRAM_COUNTER_UPDATE;
     }
 
+    /**
+     * Computes the hash code of the subtract instruction.
+     *
+     * @return the hash code of the subtract instruction
+     */
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(result, source);
     }
 
     /**
