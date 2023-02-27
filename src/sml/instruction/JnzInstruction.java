@@ -1,10 +1,10 @@
 package sml.instruction;
 
-// TODO: write a JavaDoc for the class
-
 import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
+
+import java.util.Objects;
 
 /**
  * Represents a jump instruction.
@@ -12,7 +12,6 @@ import sml.RegisterName;
  * @author Szymon Swendrowski
  */
 public class JnzInstruction extends Instruction{
-
     public static final String OP_CODE = "jnz";
     private final RegisterName source;
     private final String L;
@@ -30,8 +29,19 @@ public class JnzInstruction extends Instruction{
         this.L = L;
     }
 
+    /**
+     * Returns true if the given object is a jump instruction with
+     * the same result and source registers.
+     *
+     * @param o object to compare
+     * @return True or False
+     */
     @Override
     public boolean equals(Object o) {
+        if (o instanceof JnzInstruction other) {
+            return Objects.equals(source, other.source)
+                    && Objects.equals(L, other.L);
+        }
         return false;
     }
 
@@ -48,9 +58,14 @@ public class JnzInstruction extends Instruction{
                 : NORMAL_PROGRAM_COUNTER_UPDATE;
     }
 
+    /**
+     * Computes the hash code of the jump instruction.
+     *
+     * @return the hash code of the multiply instruction
+     */
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(source, L);
     }
 
     /**
