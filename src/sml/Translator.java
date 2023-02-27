@@ -102,6 +102,12 @@ public final class Translator {
                 return new MovInstruction(label, Register.valueOf(r), x);
             }
 
+            case JnzInstruction.OP_CODE -> {
+                String s = scan();
+                String L = scan();
+                return new JnzInstruction(label, Register.valueOf(s), L);
+            }
+
             // TODO: add code for all other types of instructions
 
             // TODO: Then, replace the switch by using the Reflection API
