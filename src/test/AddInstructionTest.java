@@ -31,7 +31,7 @@ class AddInstructionTest {
   }
 
   @Test
-  void executeValid() {
+  void addTestOne() {
     registers.set(EAX, 5);
     registers.set(EBX, 6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
@@ -40,7 +40,7 @@ class AddInstructionTest {
   }
 
   @Test
-  void executeValidTwo() {
+  void addTestTwo() {
     registers.set(EAX, -5);
     registers.set(EBX, 6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
@@ -49,7 +49,7 @@ class AddInstructionTest {
   }
 
   @Test
-  void executeValidThree() {
+  void equalsTestOne() {
     registers.set(EAX, 5);
     registers.set(EBX, 6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
@@ -58,7 +58,7 @@ class AddInstructionTest {
   }
 
   @Test
-  void executeValidFour() {
+  void equalsTestTwo() {
     registers.set(EAX, 5);
     registers.set(EBX, 6);
     registers.set(ECX, 7);
@@ -68,7 +68,7 @@ class AddInstructionTest {
   }
 
   @Test
-  void executeValidFive() {
+  void equalsMismatchTest() {
     registers.set(EAX, 5);
     registers.set(EBX, 6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
@@ -77,7 +77,7 @@ class AddInstructionTest {
   }
 
   @Test
-  void executeValidSix() {
+  void hashCodeTest() {
     registers.set(EAX, 5);
     registers.set(EBX, 6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
