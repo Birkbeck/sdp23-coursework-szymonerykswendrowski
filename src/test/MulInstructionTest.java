@@ -83,12 +83,4 @@ class MulInstructionTest {
         Instruction instruction2 = new AddInstruction(null, EAX, EBX);
         Assertions.assertFalse(instruction.equals(instruction2));
     }
-
-    @Test
-    void hashCodeTest() {
-        registers.set(EAX, 5);
-        registers.set(EBX, 6);
-        Instruction instruction = new MulInstruction(null, EAX, EBX);
-        Assertions.assertNotNull(instruction.hashCode());
-    }
 }

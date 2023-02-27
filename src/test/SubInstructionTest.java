@@ -74,12 +74,4 @@ class SubInstructionTest {
         Instruction instruction2 = new AddInstruction(null, EAX, EBX);
         Assertions.assertFalse(instruction.equals(instruction2));
     }
-
-    @Test
-    void hashCodeTest() {
-        registers.set(EAX, 5);
-        registers.set(EBX, 6);
-        Instruction instruction = new AddInstruction(null, EAX, EBX);
-        Assertions.assertNotNull(instruction.hashCode());
-    }
 }
