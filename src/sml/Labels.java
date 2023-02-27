@@ -52,7 +52,29 @@ public final class Labels {
 				.collect(Collectors.joining(", ", "[", "]"));
 	}
 
-	// TODO: Implement equals and hashCode (needed in class Machine).
+	/**
+	 * Returns true if the given object is a labels instance
+	 *
+	 * @param o object to compare
+	 * @return True or False
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Labels other) {
+			return labels.equals(other.labels);
+		}
+		return false;
+	}
+
+	/**
+	 * Computes the hash value of the labels.
+	 *
+	 * @return the hash code of the labels
+	 */
+	@Override
+	public int hashCode() {
+		return labels.hashCode();
+	}
 
 	/**
 	 * Removes the labels
