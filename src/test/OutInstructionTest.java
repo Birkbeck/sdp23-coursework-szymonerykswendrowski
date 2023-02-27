@@ -8,12 +8,13 @@ import org.junit.jupiter.api.Test;
 import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
+import sml.instruction.AddInstruction;
 import sml.instruction.OutInstruction;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static sml.Registers.Register.EAX;
+import static sml.Registers.Register.*;
 
 class OutInstructionTest {
     private Machine machine;
@@ -38,7 +39,7 @@ class OutInstructionTest {
     }
 
     @Test
-    void executeValid() {
+    void outTestOne() {
         registers.set(EAX, 5);
         Instruction instruction = new OutInstruction(null, EAX);
         instruction.execute(machine);
@@ -46,10 +47,44 @@ class OutInstructionTest {
     }
 
     @Test
-    void executeValidTwo() {
+    void outTestTwo() {
         registers.set(EAX, -5);
         Instruction instruction = new OutInstruction(null, EAX);
         instruction.execute(machine);
         Assertions.assertEquals("-5", outContent.toString());
+    }
+
+    @Test
+    void equalsTestOne() {
+        registers.set(EAX, 5);
+        Instruction instruction = new OutInstruction(null, EAX);
+        Instruction instruction2 = new OutInstruction(null, EAX);
+        Assertions.assertTrue(instruction.equals(instruction2));
+    }
+
+    @Test
+    void equalsTestTwo() {
+        registers.set(EAX, 5);
+        registers.set(EBX, 6);
+        Instruction instruction = new OutInstruction(null, EAX);
+        Instruction instruction2 = new OutInstruction(null, EBX);
+        Assertions.assertFalse(instruction.equals(instruction2));
+    }
+
+    @Test
+    void equalsMismatchTest() {
+        registers.set(EAX, 2);
+        registers.set(EBX, 3);
+        Instruction instruction = new OutInstruction(null, EAX);
+        Instruction instruction2 = new AddInstruction(null, EAX, EBX);
+        Assertions.assertFalse(instruction.equals(instruction2));
+    }
+
+    @Test
+    void hashCodeTest() {
+        registers.set(EAX, 5);
+        Instruction instruction = new OutInstruction(null, EAX);
+        Instruction instruction2 = new OutInstruction(null, EAX);
+        Assertions.assertEquals(instruction.hashCode(), instruction2.hashCode());
     }
 }
