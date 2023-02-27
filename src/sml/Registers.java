@@ -54,7 +54,8 @@ public final class Registers {
     }
 
     /**
-     * Returns true if the given object is a Registers instance, false otherwise.
+     * Returns true if the given object is a registers instance
+     * with equal registers.
      *
      * @param o object to compare
      * @return True or False
