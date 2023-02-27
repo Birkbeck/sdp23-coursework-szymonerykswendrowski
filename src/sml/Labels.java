@@ -23,10 +23,12 @@ public final class Labels {
 	 */
 	public void addLabel(String label, int address) {
 		Objects.requireNonNull(label);
-		labels.put(label, address);
-		/* Check for duplicate labels */
+		/* Check for duplicate labels, have to do this before
+		* the label is put in as put() replaces duplicate
+		* keys in HashMaps. */
 		if (labels.containsKey(label))
 			throw new IllegalArgumentException("Duplicate label: " + label);
+		labels.put(label, address);
 	}
 
 	/**
