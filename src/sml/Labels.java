@@ -5,11 +5,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
+ * Represents the labels in the program.
+ * (Note: this is not to be confused with the Strings that are used
+ * to represent the labels in instructions.)
  *
- * @author ...
+ * @author Szymon Swendrowski
  */
 public final class Labels {
 	private final Map<String, Integer> labels = new HashMap<>();
