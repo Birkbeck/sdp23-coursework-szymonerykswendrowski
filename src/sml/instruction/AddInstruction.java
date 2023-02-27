@@ -4,7 +4,7 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
-// TODO: write a JavaDoc for the class
+import java.util.Objects;
 
 /**
  * Represents an add instruction.
@@ -30,8 +30,19 @@ public class AddInstruction extends Instruction {
 		this.source = source;
 	}
 
+	/**
+	 * Returns true if the given object is an add instruction with
+	 * the same result and source registers.
+	 *
+	 * @param o object to compare
+	 * @return True or False
+	 */
 	@Override
 	public boolean equals(Object o) {
+		if (o instanceof AddInstruction other) {
+			return Objects.equals(result, other.result)
+					&& Objects.equals(source, other.source);
+		}
 		return false;
 	}
 
@@ -50,9 +61,14 @@ public class AddInstruction extends Instruction {
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
+	/**
+	 * Computes the hash code of the add instruction.
+	 *
+	 * @return the hash code of the add instruction
+	 */
 	@Override
 	public int hashCode() {
-		return 0;
+		return Objects.hash(result, source);
 	}
 
 	/**
