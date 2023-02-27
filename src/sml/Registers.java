@@ -3,23 +3,31 @@ package sml;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
+ * Represents the registers.
  *
- * @author ...
+ * @author Szymon Swendrowski
  */
 public final class Registers {
     private final Map<Register, Integer> registers = new HashMap<>();
 
+    /**
+     * Represents the register names.
+     */
     public enum Register implements RegisterName {
         EAX, EBX, ECX, EDX, ESP, EBP, ESI, EDI;
     }
 
+    /**
+     * Creates a new instance of Registers.
+     */
     public Registers() {
         clear(); // the class is final
     }
 
+    /**
+     * Clears the registers.
+     */
     public void clear() {
         for (Register register : Register.values())
             registers.put(register, 0);
@@ -45,7 +53,12 @@ public final class Registers {
         return registers.get((Register)register);
     }
 
-
+    /**
+     * Returns true if the given object is a Registers instance, false otherwise.
+     *
+     * @param o object to compare
+     * @return True or False
+     */
     @Override
     public boolean equals(Object o) {
         if (o instanceof Registers other) {
@@ -54,11 +67,21 @@ public final class Registers {
         return false;
     }
 
+    /**
+     * Computes the hash value of the registers.
+     *
+     * @return the hash code of the registers
+     */
     @Override
     public int hashCode() {
         return registers.hashCode();
     }
 
+    /**
+     * Computes the string representation of the registers.
+     *
+     * @return the string representation of the registers
+     */
     @Override
     public String toString() {
         return registers.entrySet().stream()
