@@ -35,9 +35,12 @@ public final class Labels {
 	 * @return the address the label refers to
 	 */
 	public int getAddress(String label) {
-		// TODO: Where can NullPointerException be thrown here?
-		//       (Write an explanation.)
-		//       Add code to deal with non-existent labels.
+		/* A NullPointerException could be thrown here if getAddress is used
+		* on a label that wasn't assigned to a given instruction using
+		* the addLabel method, but instead, was only used as a parameter
+		* in the constructor of a given instruction. */
+		if (!labels.containsKey(label))
+			throw new IllegalArgumentException("Label does not exist: " + label);
 		return labels.get(label);
 	}
 
