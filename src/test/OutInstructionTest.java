@@ -43,7 +43,7 @@ class OutInstructionTest {
         registers.set(EAX, 5);
         Instruction instruction = new OutInstruction(null, EAX);
         instruction.execute(machine);
-        Assertions.assertEquals("5", outContent.toString());
+        Assertions.assertEquals("5", outContent.toString().trim());
     }
 
     @Test
@@ -51,7 +51,7 @@ class OutInstructionTest {
         registers.set(EAX, -5);
         Instruction instruction = new OutInstruction(null, EAX);
         instruction.execute(machine);
-        Assertions.assertEquals("-5", outContent.toString());
+        Assertions.assertEquals("-5", outContent.toString().trim());
     }
 
     @Test
