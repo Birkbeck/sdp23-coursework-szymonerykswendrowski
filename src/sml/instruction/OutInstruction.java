@@ -1,10 +1,10 @@
 package sml.instruction;
 
-// TODO: write a JavaDoc for the class
-
 import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
+
+import java.util.Objects;
 
 /**
  * Represents an output instruction.
@@ -26,8 +26,18 @@ public class OutInstruction extends Instruction {
         this.source = source;
     }
 
+    /**
+     * Returns true if the given object is a output instruction with
+     * the same result and source registers.
+     *
+     * @param o object to compare
+     * @return True or False
+     */
     @Override
     public boolean equals(Object o) {
+        if (o instanceof OutInstruction other) {
+            return Objects.equals(source, other.source);
+        }
         return false;
     }
 
@@ -45,9 +55,14 @@ public class OutInstruction extends Instruction {
         return NORMAL_PROGRAM_COUNTER_UPDATE;
     }
 
+    /**
+     * Computes the hash value of the output instruction.
+     *
+     * @return the hash code of the output instruction
+     */
     @Override
     public int hashCode() {
-        return 0;
+        return source.hashCode();
     }
 
     /**
