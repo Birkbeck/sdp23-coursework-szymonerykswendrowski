@@ -12,6 +12,7 @@ import static sml.Instruction.NORMAL_PROGRAM_COUNTER_UPDATE;
  * <p>
  * An instance contains 32 registers and methods to access and change them.
  *
+ * @author Szymon Swendrowski
  */
 public final class Machine {
 
@@ -45,18 +46,32 @@ public final class Machine {
 		}
 	}
 
+	/**
+	 * Get the labels present in the program.
+	 *
+	 * @return labels present in the program
+	 */
 	public Labels getLabels() {
 		return this.labels;
 	}
 
+	/**
+	 * Get the program under execution.
+	 *
+	 * @return program under execution
+	 */
 	public List<Instruction> getProgram() {
 		return this.program;
 	}
 
+	/**
+	 * Get the registers of the machine.
+	 *
+	 * @return registers of the machine
+	 */
 	public Registers getRegisters() {
 		return this.registers;
 	}
-
 
 	/**
 	 * String representation of the program under execution.
@@ -70,13 +85,16 @@ public final class Machine {
 				.collect(Collectors.joining("\n"));
 	}
 
-	// TODO: use pattern matching for instanceof
-	// https://docs.oracle.com/en/java/javase/14/language/pattern-matching-instanceof-operator.html
+	/**
+	 * Returns true if the given object is a machine with the same labels,
+	 * program, registers and program counter.
+	 *
+	 * @param o object to compare
+	 * @return True or False
+	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof Machine) {
-			// TODO:
-			Machine other = (Machine) o;
+		if (o instanceof Machine other) {
 			return Objects.equals(this.labels, other.labels)
 					&& Objects.equals(this.program, other.program)
 					&& Objects.equals(this.registers, other.registers)
@@ -85,6 +103,11 @@ public final class Machine {
 		return false;
 	}
 
+	/**
+	 * Computes the hash value of the machine.
+	 *
+	 * @return the hash code of the machine
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(labels, program, registers, programCounter);
