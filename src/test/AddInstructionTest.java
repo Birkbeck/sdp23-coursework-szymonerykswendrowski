@@ -9,6 +9,7 @@ import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
 import sml.instruction.AddInstruction;
+import sml.instruction.SubInstruction;
 
 import static sml.Registers.Register.*;
 
@@ -45,5 +46,41 @@ class AddInstructionTest {
     Instruction instruction = new AddInstruction(null, EAX, EBX);
     instruction.execute(machine);
     Assertions.assertEquals(1, machine.getRegisters().get(EAX));
+  }
+
+  @Test
+  void executeValidThree() {
+    registers.set(EAX, 5);
+    registers.set(EBX, 6);
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instruction2 = new AddInstruction(null, EAX, EBX);
+    Assertions.assertTrue(instruction.equals(instruction2));
+  }
+
+  @Test
+  void executeValidFour() {
+    registers.set(EAX, 5);
+    registers.set(EBX, 6);
+    registers.set(ECX, 7);
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instruction2 = new AddInstruction(null, EAX, ECX);
+    Assertions.assertFalse(instruction.equals(instruction2));
+  }
+
+  @Test
+  void executeValidFive() {
+    registers.set(EAX, 5);
+    registers.set(EBX, 6);
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction instruction2 = new SubInstruction(null, EAX, EBX);
+    Assertions.assertFalse(instruction.equals(instruction2));
+  }
+
+  @Test
+  void executeValidSix() {
+    registers.set(EAX, 5);
+    registers.set(EBX, 6);
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Assertions.assertNotNull(instruction.hashCode());
   }
 }
