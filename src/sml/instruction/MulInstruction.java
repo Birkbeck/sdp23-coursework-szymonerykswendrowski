@@ -13,7 +13,6 @@ import java.util.Objects;
  */
 
 public class MulInstruction extends Instruction {
-
     public static final String OP_CODE = "mul";
     private final RegisterName result;
     private final RegisterName source;
@@ -46,6 +45,7 @@ public class MulInstruction extends Instruction {
         }
         return false;
     }
+
     /**
      * Executes the multiply instruction in the given machine.
      *
