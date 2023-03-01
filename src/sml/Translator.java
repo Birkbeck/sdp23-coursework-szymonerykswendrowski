@@ -11,14 +11,15 @@ import java.util.stream.IntStream;
 import static sml.Registers.Register;
 
 /**
- * This class ....
+ * This class is responsible for reading the SML program from a file and
+ * translating it into a program that can be executed by the machine.
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Szymon Swendrowski
  */
 public final class Translator {
-
+    private static Translator instance; // singleton instance
     private final String fileName; // source file of SML code
 
     // line contains the characters in the current line that's not been processed yet
@@ -36,35 +37,21 @@ public final class Translator {
             short.class, Short.class,
             void.class, Void.class);
 
-    public Translator(String fileName) {
+    private Translator(String fileName) {
         this.fileName =  fileName;
     }
 
-    // translate the small program in the file into lab (the labels) and
-    // prog (the program)
-    // return "no errors were detected"
-
-    public void readAndTranslate(Labels labels, List<Instruction> program)
-            throws IOException, ClassNotFoundException,
-            InvocationTargetException, InstantiationException,
-            IllegalAccessException {
-        try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
-            labels.reset();
-            program.clear();
-
-            // Each iteration processes line and reads the next input line into "line"
-            while (sc.hasNextLine()) {
-                line = sc.nextLine();
-                String label = getLabel();
-
-                Instruction instruction = getInstruction(label);
-                if (instruction != null) {
-                    if (label != null)
-                        labels.addLabel(label, program.size());
-                    program.add(instruction);
-                }
-            }
+    /**
+     * Returns the singleton instance of the translator.
+     *
+     * @param fileName the name of the file containing the SML code
+     * @return the singleton instance of the translator
+     */
+    public static Translator getInstance(String fileName) {
+        if (instance == null) {
+            instance = new Translator(fileName);
         }
+        return instance;
     }
 
     /**
@@ -146,9 +133,49 @@ public final class Translator {
         return null;
     }
 
-    /*
+    // translate the small program in the file into lab (the labels) and
+    // prog (the program)
+    // return "no errors were detected"
+
+    /**
+     * Reads the SML code from the file and translates it into a list of instructions.
+     *
+     * @param labels the labels of the instructions
+     * @param program the program (list of instructions)
+     * @throws IOException if the file cannot be read
+     * @throws ClassNotFoundException if the instruction class cannot be found
+     * @throws InvocationTargetException if the instruction constructor cannot be invoked
+     * @throws InstantiationException if the instruction cannot be instantiated
+     * @throws IllegalAccessException if the instruction constructor is not accessible
+     */
+    public void readAndTranslate(Labels labels, List<Instruction> program)
+            throws IOException, ClassNotFoundException,
+            InvocationTargetException, InstantiationException,
+            IllegalAccessException {
+        try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
+            labels.reset();
+            program.clear();
+
+            // Each iteration processes line and reads the next input line into "line"
+            while (sc.hasNextLine()) {
+                line = sc.nextLine();
+                String label = getLabel();
+
+                Instruction instruction = getInstruction(label);
+                if (instruction != null) {
+                    if (label != null)
+                        labels.addLabel(label, program.size());
+                    program.add(instruction);
+                }
+            }
+        }
+    }
+
+    /**
      * Return the first word of line and remove it from line.
      * If there is no word, return "".
+     *
+     * @return the first word of line or "" if there is no word
      */
     private String scan() {
         line = line.trim();
@@ -164,7 +191,7 @@ public final class Translator {
     }
 
     /**
-     * Return the correct Wrapper class if testClass is primitive
+     * Return the correct Wrapper class if testClass is primitive.
      *
      * @param testClass class being tested
      * @return Object class or testClass
