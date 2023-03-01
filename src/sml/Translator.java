@@ -6,9 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.TypeVariable;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.IntStream;
 
 import static sml.Registers.Register;
 
@@ -72,27 +73,50 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        String instructionName = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
+        String instructionName = opcode.substring(0, 1).toUpperCase() +
+                opcode.substring(1).toLowerCase();
         Class<?> instructionClass = Class.forName("sml.instruction."
                 + instructionName + "Instruction");
 
-        if (instructionClass == OutInstruction.class) {
-            Constructor<?> constructor = instructionClass.getConstructor(String.class, RegisterName.class);
-            Object object = constructor.newInstance(label, Register.valueOf(scan()));
-            return (Instruction) object;
-        } else if (instructionClass == MovInstruction.class) {
-            Constructor<?> constructor = instructionClass.getConstructor(String.class, RegisterName.class, int.class);
-            Object object = constructor.newInstance(label, Register.valueOf(scan()), Integer.parseInt(scan()));
-            return (Instruction) object;
-        } else if (instructionClass == JnzInstruction.class) {
-            Constructor<?> constructor = instructionClass.getConstructor(String.class, RegisterName.class, String.class);
-            Object object = constructor.newInstance(label, Register.valueOf(scan()), scan());
-            return (Instruction) object;
-        } else {
-            Constructor<?> constructor = instructionClass.getConstructor(String.class, RegisterName.class, RegisterName.class);
-            Object object = constructor.newInstance(label, Register.valueOf(scan()), Register.valueOf(scan()));
-            return (Instruction) object;
+        Constructor<?>[] classConstructors = instructionClass.getConstructors();
+        Constructor<?> candidateConstructor = classConstructors[0];
+        int parameterCount = classConstructors[0].getParameterCount();
+
+        List<String> arguments = new ArrayList<>();
+        arguments.add(label);
+        IntStream.range(0, parameterCount - 1).mapToObj(i -> scan()).forEach(arguments::add);
+        System.out.println(arguments);
+
+        int argumentLen = arguments.toArray().length;
+        String[] argumentsList = arguments.toArray(new String[argumentLen]);
+
+
+        Object[] parameterObjs = new Object[argumentLen];
+        // get the candidate constructor parameters
+        Class<?>[] parameterTypes = classConstructors[0].getParameterTypes();
+        for (int i = 0; i < argumentLen; i++) {
+            // attempt to type the parameters using any available string constructors
+            // NoSuchMethodException will be thrown where retyping isn't possible
+            Class<?> c = toWrapper(parameterTypes[i]);
+            parameterObjs[i] = c;
+            System.out.println(parameterObjs[i]);
         }
+        System.out.println(Arrays.toString(parameterObjs));
+            // return instance ob object using the successful constructor
+            // and parameters of the right class types.
+
+        for (int j = 0; j < argumentLen; j++) {
+            if (parameterObjs[j].equals(Integer.class)) {
+                parameterObjs[j] = Integer.parseInt(argumentsList[j]);
+            } else if (parameterObjs[j].equals(RegisterName.class)) {
+                parameterObjs[j] = Register.valueOf(argumentsList[j]);
+            } else {
+                parameterObjs[j] = argumentsList[j];
+            }
+        }
+        System.out.println(Arrays.toString(parameterObjs));
+
+        return (Instruction) candidateConstructor.newInstance(parameterObjs);
     }
 
     private String getLabel() {
@@ -120,5 +144,26 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
+            int.class, Integer.class,
+            long.class, Long.class,
+            boolean.class, Boolean.class,
+            byte.class, Byte.class,
+            char.class, Character.class,
+            float.class, Float.class,
+            double.class, Double.class,
+            short.class, Short.class,
+            void.class, Void.class);
+
+    /**
+     * Return the correct Wrapper class if testClass is primitive
+     *
+     * @param testClass class being tested
+     * @return Object class or testClass
+     */
+    private static Class<?> toWrapper(Class<?> testClass) {
+        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
     }
 }
