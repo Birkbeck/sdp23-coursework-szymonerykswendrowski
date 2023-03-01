@@ -1,12 +1,9 @@
 package sml;
 
-import sml.instruction.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.TypeVariable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -27,6 +24,18 @@ public final class Translator {
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
 
+    // Primitive type wrappers
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
+            int.class, Integer.class,
+            long.class, Long.class,
+            boolean.class, Boolean.class,
+            byte.class, Byte.class,
+            char.class, Character.class,
+            float.class, Float.class,
+            double.class, Double.class,
+            short.class, Short.class,
+            void.class, Void.class);
+
     public Translator(String fileName) {
         this.fileName =  fileName;
     }
@@ -35,7 +44,10 @@ public final class Translator {
     // prog (the program)
     // return "no errors were detected"
 
-    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void readAndTranslate(Labels labels, List<Instruction> program)
+            throws IOException, ClassNotFoundException,
+            InvocationTargetException, InstantiationException,
+            IllegalAccessException {
         try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
             labels.reset();
             program.clear();
@@ -64,47 +76,48 @@ public final class Translator {
      * The input line should consist of a single SML instruction,
      * with its label already removed.
      */
-    // TODO: Then, replace the switch by using the Reflection API
-
     // TODO: Next, use dependency injection to allow this machine class
     //       to work with different sets of opcodes (different CPUs)
-    private Instruction getInstruction(String label) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private Instruction getInstruction(String label) {
         if (line.isEmpty())
             return null;
 
+        // Extract the opcode from the line and get instruction type
         String opcode = scan();
         String instructionName = opcode.substring(0, 1).toUpperCase() +
                 opcode.substring(1).toLowerCase();
-        Class<?> instructionClass = Class.forName("sml.instruction."
-                + instructionName + "Instruction");
+        Class<?> instructionClass;
+        try {
+            instructionClass = Class.forName("sml.instruction."
+                    + instructionName + "Instruction");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e + " is not a valid instruction");
+        }
 
+        // Get the candidate constructor and the number of parameters
         Constructor<?>[] classConstructors = instructionClass.getConstructors();
-        Constructor<?> candidateConstructor = classConstructors[0];
+        Constructor<?> Constructor = classConstructors[0];
         int parameterCount = classConstructors[0].getParameterCount();
 
+        // Get the arguments from the line
         List<String> arguments = new ArrayList<>();
         arguments.add(label);
         IntStream.range(0, parameterCount - 1).mapToObj(i -> scan()).forEach(arguments::add);
-        System.out.println(arguments);
 
+        // Construct an array of the arguments (as strings)
         int argumentLen = arguments.toArray().length;
         String[] argumentsList = arguments.toArray(new String[argumentLen]);
 
-
+        // Create an array of the correct parameter types
         Object[] parameterObjs = new Object[argumentLen];
-        // get the candidate constructor parameters
+        // Get the constructor parameters
         Class<?>[] parameterTypes = classConstructors[0].getParameterTypes();
         for (int i = 0; i < argumentLen; i++) {
-            // attempt to type the parameters using any available string constructors
-            // NoSuchMethodException will be thrown where retyping isn't possible
-            Class<?> c = toWrapper(parameterTypes[i]);
-            parameterObjs[i] = c;
-            System.out.println(parameterObjs[i]);
+            // Wrap the parameter types and store in parameterObjs
+            parameterObjs[i] = toWrapper(parameterTypes[i]);
         }
-        System.out.println(Arrays.toString(parameterObjs));
-            // return instance ob object using the successful constructor
-            // and parameters of the right class types.
 
+        // Convert the arguments to the correct type, i.e. arguments to parameters
         for (int j = 0; j < argumentLen; j++) {
             if (parameterObjs[j].equals(Integer.class)) {
                 parameterObjs[j] = Integer.parseInt(argumentsList[j]);
@@ -114,9 +127,13 @@ public final class Translator {
                 parameterObjs[j] = argumentsList[j];
             }
         }
-        System.out.println(Arrays.toString(parameterObjs));
-
-        return (Instruction) candidateConstructor.newInstance(parameterObjs);
+        // Return new instance of the instruction using the successful constructor
+        // and parameters of the right class types.
+        try {
+            return (Instruction) Constructor.newInstance(parameterObjs);
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e + "Constructor failed");
+        }
     }
 
     private String getLabel() {
@@ -145,17 +162,6 @@ public final class Translator {
 
         return line;
     }
-
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
-            int.class, Integer.class,
-            long.class, Long.class,
-            boolean.class, Boolean.class,
-            byte.class, Byte.class,
-            char.class, Character.class,
-            float.class, Float.class,
-            double.class, Double.class,
-            short.class, Short.class,
-            void.class, Void.class);
 
     /**
      * Return the correct Wrapper class if testClass is primitive

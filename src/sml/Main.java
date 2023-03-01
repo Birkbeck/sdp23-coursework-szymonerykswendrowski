@@ -9,7 +9,7 @@ public class Main {
 	 *
 	 * @param args name of the file containing the program text.
 	 */
-	public static void main(String... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+	public static void main(String... args) {
 		if (args.length != 1) {
 			System.err.println("Incorrect number of arguments - Machine <file> - required");
 			System.exit(-1);
@@ -29,7 +29,8 @@ public class Main {
 
 			System.out.println("Values of registers at program termination:" + m.getRegisters() + ".");
 		}
-		catch (IOException e) {
+		catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException |
+			   IllegalAccessException e) {
 			System.out.println("Error reading the program from " + args[0]);
 		}
 	}
