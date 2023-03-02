@@ -32,6 +32,20 @@ public final class Labels {
   }
 
   /**
+   * Returns true if the given object is a labels instance
+   *
+   * @param o object to compare
+   * @return True or False
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof Labels other) {
+      return labels.equals(other.labels);
+    }
+    return false;
+  }
+
+  /**
    * Returns the address associated with the label.
    *
    * @param label the label
@@ -45,33 +59,6 @@ public final class Labels {
     if (!labels.containsKey(label))
       throw new IllegalArgumentException("Label does not exist: " + label);
     return labels.get(label);
-  }
-
-  /**
-   * representation of this instance,
-   * in the form "[label -> address, label -> address, ..., label -> address]"
-   *
-   * @return the string representation of the labels map
-   */
-  @Override
-  public String toString() {
-    return labels.entrySet().stream()
-            .map(entry -> entry.getKey() + " -> " + entry.getValue())
-            .collect(Collectors.joining(", ", "[", "]"));
-  }
-
-  /**
-   * Returns true if the given object is a labels instance
-   *
-   * @param o object to compare
-   * @return True or False
-   */
-  @Override
-  public boolean equals(Object o) {
-    if (o instanceof Labels other) {
-      return labels.equals(other.labels);
-    }
-    return false;
   }
 
   /**
@@ -89,5 +76,18 @@ public final class Labels {
    */
   public void reset() {
     labels.clear();
+  }
+
+  /**
+   * representation of this instance,
+   * in the form "[label -> address, label -> address, ..., label -> address]"
+   *
+   * @return the string representation of the labels map
+   */
+  @Override
+  public String toString() {
+    return labels.entrySet().stream()
+            .map(entry -> entry.getKey() + " -> " + entry.getValue())
+            .collect(Collectors.joining(", ", "[", "]"));
   }
 }
