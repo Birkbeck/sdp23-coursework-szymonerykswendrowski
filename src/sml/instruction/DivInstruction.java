@@ -66,9 +66,9 @@ public class DivInstruction extends Instruction {
   }
 
   /**
-   * Computes the hash code of the subtract instruction.
+   * Computes the hash code of the divide instruction.
    *
-   * @return the hash code of the subtract instruction
+   * @return the hash code of the divide instruction
    */
   @Override
   public int hashCode() {
