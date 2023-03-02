@@ -61,7 +61,7 @@ public class JnzInstruction extends Instruction{
     /**
      * Computes the hash code of the jump instruction.
      *
-     * @return the hash code of the multiply instruction
+     * @return the hash code of the jump instruction
      */
     @Override
     public int hashCode() {

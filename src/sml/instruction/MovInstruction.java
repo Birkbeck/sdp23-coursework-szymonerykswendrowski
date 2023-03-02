@@ -48,9 +48,14 @@ public class MovInstruction extends Instruction {
         return NORMAL_PROGRAM_COUNTER_UPDATE;
     }
 
+    /**
+     * Computes the hash code of the move instruction.
+     *
+     * @return the hash code of the move instruction
+     */
     @Override
     public int hashCode() {
-        return 0;
+        return result.hashCode();
     }
 
     /**
