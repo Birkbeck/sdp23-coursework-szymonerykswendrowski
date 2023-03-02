@@ -77,11 +77,15 @@ public abstract class Instruction {
   @Override
   public abstract int hashCode();
 
-  // The method below is declared abstract meaning that it must be implemented by a subclass
-  // (unless the subclass is abstract), but it is not implemented here in its declaration.
+  /*
+   The method below is declared abstract meaning that it must be implemented by a subclass
+   (unless the subclass is abstract), but it is not implemented here in its declaration.
+  */
 
   /**
    * Computes the string representation of the instruction.
+   *
+   * @return the string representation of the instruction
    */
   @Override
   public abstract String toString();
