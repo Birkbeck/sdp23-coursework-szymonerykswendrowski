@@ -10,7 +10,7 @@ import static sml.Instruction.NORMAL_PROGRAM_COUNTER_UPDATE;
 /**
  * Represents the machine, the context in which programs run.
  * <p>
- * An instance contains 32 registers and methods to access and change them.
+ * An instance contains 8 registers and methods to access and change them.
  *
  * @author Szymon Swendrowski
  */
