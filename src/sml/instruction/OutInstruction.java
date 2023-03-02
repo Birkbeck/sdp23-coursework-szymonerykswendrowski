@@ -27,7 +27,7 @@ public class OutInstruction extends Instruction {
   }
 
   /**
-   * Returns true if the given object is a output instruction with
+   * Returns true if the given object is an output instruction with
    * the same result and source registers.
    *
    * @param o object to compare
