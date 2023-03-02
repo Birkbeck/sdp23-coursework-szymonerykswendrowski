@@ -8,8 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static sml.Registers.Register;
-
 /**
  * This class is responsible for reading the SML program from a file and
  * translating it into a program that can be executed by the machine.
@@ -24,18 +22,6 @@ public final class Translator {
 
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
-
-    // Primitive type wrappers
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
-            int.class, Integer.class,
-            long.class, Long.class,
-            boolean.class, Boolean.class,
-            byte.class, Byte.class,
-            char.class, Character.class,
-            float.class, Float.class,
-            double.class, Double.class,
-            short.class, Short.class,
-            void.class, Void.class);
 
     private Translator(String fileName) {
         this.fileName =  fileName;
@@ -55,7 +41,7 @@ public final class Translator {
     }
 
     /**
-     * Translates the current line into an instruction with the given label
+     * Translates the current line into an instruction with the given label.
      *
      * @param label the instruction label
      * @return the new instruction
@@ -63,8 +49,6 @@ public final class Translator {
      * The input line should consist of a single SML instruction,
      * with its label already removed.
      */
-    // TODO: Next, use dependency injection to allow this machine class
-    //       to work with different sets of opcodes (different CPUs)
     private Instruction getInstruction(String label) {
         if (line.isEmpty())
             return null;
@@ -78,12 +62,11 @@ public final class Translator {
             instructionClass = Class.forName("sml.instruction."
                     + instructionName + "Instruction");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e + " is not a valid instruction");
+            throw new RuntimeException(instructionName + " is not a valid instruction");
         }
 
         // Get the candidate constructor and the number of parameters
         Constructor<?>[] classConstructors = instructionClass.getConstructors();
-        Constructor<?> Constructor = classConstructors[0];
         int parameterCount = classConstructors[0].getParameterCount();
 
         // Get the arguments from the line
@@ -91,36 +74,7 @@ public final class Translator {
         arguments.add(label);
         IntStream.range(0, parameterCount - 1).mapToObj(i -> scan()).forEach(arguments::add);
 
-        // Construct an array of the arguments (as strings)
-        int argumentLen = arguments.toArray().length;
-        String[] argumentsList = arguments.toArray(new String[argumentLen]);
-
-        // Create an array of the correct parameter types
-        Object[] parameterObjs = new Object[argumentLen];
-        // Get the constructor parameters
-        Class<?>[] parameterTypes = classConstructors[0].getParameterTypes();
-        for (int i = 0; i < argumentLen; i++) {
-            // Wrap the parameter types and store in parameterObjs
-            parameterObjs[i] = toWrapper(parameterTypes[i]);
-        }
-
-        // Convert the arguments to the correct type, i.e. arguments to parameters
-        for (int j = 0; j < argumentLen; j++) {
-            if (parameterObjs[j].equals(Integer.class)) {
-                parameterObjs[j] = Integer.parseInt(argumentsList[j]);
-            } else if (parameterObjs[j].equals(RegisterName.class)) {
-                parameterObjs[j] = Register.valueOf(argumentsList[j]);
-            } else {
-                parameterObjs[j] = argumentsList[j];
-            }
-        }
-        // Return new instance of the instruction using the successful constructor
-        // and parameters of the right class types.
-        try {
-            return (Instruction) Constructor.newInstance(parameterObjs);
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e + "Constructor failed");
-        }
+        return InstructionFactory.getInstruction(instructionClass, arguments);
     }
 
     private String getLabel() {
@@ -188,15 +142,5 @@ public final class Translator {
             }
 
         return line;
-    }
-
-    /**
-     * Return the correct Wrapper class if testClass is primitive.
-     *
-     * @param testClass class being tested
-     * @return Object class or testClass
-     */
-    private static Class<?> toWrapper(Class<?> testClass) {
-        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
     }
 }
