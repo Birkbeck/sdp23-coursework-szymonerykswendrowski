@@ -1,7 +1,5 @@
 package sml.instruction;
 
-// TODO: write a JavaDoc for the class
-
 import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
@@ -14,8 +12,8 @@ import sml.RegisterName;
 
 public class MovInstruction extends Instruction {
   public static final String OP_CODE = "mov";
-  private final RegisterName result;
   private final int x;
+  private final RegisterName result;
 
   /**
    * Constructor: an instruction to store an integer value in a register.
