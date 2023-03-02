@@ -3,6 +3,11 @@ package sml;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Represents the main class.
+ *
+ * @author Szymon Swendrowski
+ */
 public class Main {
   /**
    * Initialises the system and executes the program.
@@ -28,8 +33,8 @@ public class Main {
       System.out.println("Ending program execution.");
 
       System.out.println("Values of registers at program termination:" + m.getRegisters() + ".");
-    } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException |
-             IllegalAccessException e) {
+    } catch (IOException | ClassNotFoundException | InvocationTargetException
+             | InstantiationException | IllegalAccessException e) {
       System.out.println("Error reading the program from " + args[0]);
     }
   }
