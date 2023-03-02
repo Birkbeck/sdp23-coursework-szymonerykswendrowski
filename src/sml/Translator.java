@@ -2,9 +2,12 @@ package sml;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
 import java.nio.charset.StandardCharsets;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -23,6 +26,11 @@ public final class Translator {
   // line contains the characters in the current line that's not been processed yet
   private String line = "";
 
+  /**
+   * Constructor: an instance for the given file.
+   *
+   * @param fileName the name of the file containing the SML code
+   */
   private Translator(String fileName) {
     this.fileName = fileName;
   }
