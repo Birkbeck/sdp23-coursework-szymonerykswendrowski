@@ -34,26 +34,6 @@ public final class Registers {
   }
 
   /**
-   * Sets the given register to the value.
-   *
-   * @param register register name
-   * @param value    new value
-   */
-  public void set(RegisterName register, int value) {
-    registers.put((Register) register, value);
-  }
-
-  /**
-   * Returns the value stored in the register.
-   *
-   * @param register register name
-   * @return value
-   */
-  public int get(RegisterName register) {
-    return registers.get((Register) register);
-  }
-
-  /**
    * Returns true if the given object is a registers instance
    * with equal registers.
    *
@@ -69,6 +49,16 @@ public final class Registers {
   }
 
   /**
+   * Returns the value stored in the register.
+   *
+   * @param register register name
+   * @return value
+   */
+  public int get(RegisterName register) {
+    return registers.get((Register) register);
+  }
+
+  /**
    * Computes the hash value of the registers.
    *
    * @return the hash code of the registers
@@ -76,6 +66,16 @@ public final class Registers {
   @Override
   public int hashCode() {
     return registers.hashCode();
+  }
+
+  /**
+   * Sets the given register to the value.
+   *
+   * @param register register name
+   * @param value   new value
+   */
+  public void set(RegisterName register, int value) {
+    registers.put((Register) register, value);
   }
 
   /**
