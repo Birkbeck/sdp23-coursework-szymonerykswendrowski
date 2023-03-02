@@ -15,6 +15,9 @@ import static sml.Instruction.NORMAL_PROGRAM_COUNTER_UPDATE;
  * @author Szymon Swendrowski
  */
 public final class Machine {
+  // The program counter; it contains the index (in program)
+  // of the next instruction to be executed.
+  private int programCounter = 0;
 
   private final Labels labels = new Labels();
 
@@ -22,12 +25,31 @@ public final class Machine {
 
   private final Registers registers;
 
-  // The program counter; it contains the index (in program)
-  // of the next instruction to be executed.
-  private int programCounter = 0;
-
+  /**
+   * Constructor: a machine with 8 registers.
+   *
+   * @param registers the registers of the machine
+   */
   public Machine(Registers registers) {
     this.registers = registers;
+  }
+
+  /**
+   * Returns true if the given object is a machine with the same labels,
+   * program, registers and program counter.
+   *
+   * @param o object to compare
+   * @return True or False
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof Machine other) {
+      return Objects.equals(this.labels, other.labels)
+              && Objects.equals(this.program, other.program)
+              && Objects.equals(this.registers, other.registers)
+              && this.programCounter == other.programCounter;
+    }
+    return false;
   }
 
   /**
@@ -74,36 +96,6 @@ public final class Machine {
   }
 
   /**
-   * String representation of the program under execution.
-   *
-   * @return pretty formatted version of the code.
-   */
-  @Override
-  public String toString() {
-    return program.stream()
-            .map(Instruction::toString)
-            .collect(Collectors.joining("\n"));
-  }
-
-  /**
-   * Returns true if the given object is a machine with the same labels,
-   * program, registers and program counter.
-   *
-   * @param o object to compare
-   * @return True or False
-   */
-  @Override
-  public boolean equals(Object o) {
-    if (o instanceof Machine other) {
-      return Objects.equals(this.labels, other.labels)
-              && Objects.equals(this.program, other.program)
-              && Objects.equals(this.registers, other.registers)
-              && this.programCounter == other.programCounter;
-    }
-    return false;
-  }
-
-  /**
    * Computes the hash value of the machine.
    *
    * @return the hash code of the machine
@@ -111,5 +103,17 @@ public final class Machine {
   @Override
   public int hashCode() {
     return Objects.hash(labels, program, registers, programCounter);
+  }
+
+  /**
+   * String representation of the program under execution.
+   *
+   * @return pretty formatted version of the code
+   */
+  @Override
+  public String toString() {
+    return program.stream()
+            .map(Instruction::toString)
+            .collect(Collectors.joining("\n"));
   }
 }
