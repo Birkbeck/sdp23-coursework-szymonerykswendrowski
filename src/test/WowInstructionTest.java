@@ -18,32 +18,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 class WowInstructionTest {
-    private Machine machine;
+  private Machine machine;
 
-    // Setting up streams to capture output
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
+  // Setting up streams to capture output
+  private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+  private final PrintStream originalOut = System.out;
 
-    @BeforeEach
-    void setUp() {
-        machine = new Machine(new Registers());
-        System.setOut(new PrintStream(outContent));
-    }
+  @BeforeEach
+  void setUp() {
+    machine = new Machine(new Registers());
+    System.setOut(new PrintStream(outContent));
+  }
 
-    @AfterEach
-    void tearDown() {
-        machine = null;
-        System.setOut(originalOut);
-    }
+  @AfterEach
+  void tearDown() {
+    machine = null;
+    System.setOut(originalOut);
+  }
 
-    @Test
-    void executeTest() {
-        List<String> args = new ArrayList<>();
-        args.add("f0");
-        args.add("5");
-        Instruction instruction = InstructionFactory.getInstruction(WowInstruction.class, args);
-        instruction.execute(machine);
-        Assertions.assertEquals("Wow!\r\nWow!\r\nWow!\r\nWow!\r\nWow!",
-                outContent.toString().trim());
-    }
+  @Test
+  void executeTest() {
+    List<String> args = new ArrayList<>();
+    args.add("f0");
+    args.add("5");
+    Instruction instruction = InstructionFactory.getInstruction(WowInstruction.class, args);
+    instruction.execute(machine);
+    Assertions.assertEquals("Wow!\r\nWow!\r\nWow!\r\nWow!\r\nWow!",
+            outContent.toString().trim());
+  }
 }
