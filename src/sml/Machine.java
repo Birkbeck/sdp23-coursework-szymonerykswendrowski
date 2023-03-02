@@ -26,7 +26,7 @@ public final class Machine {
   private final Registers registers;
 
   /**
-   * Constructor: a machine with 32 registers.
+   * Constructor: a machine with 8 registers.
    *
    * @param registers the registers of the machine
    */
