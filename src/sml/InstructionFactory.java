@@ -2,9 +2,15 @@ package sml;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents an instruction factory.
+ *
+ * @author Szymon Swendrowski
+ */
 public abstract class InstructionFactory {
   // Primitive type wrappers
   private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
@@ -22,7 +28,7 @@ public abstract class InstructionFactory {
    * Returns the instruction with the given label and arguments.
    *
    * @param instructionClass the instruction class
-   * @param arguments        the instruction arguments
+   * @param arguments the instruction arguments
    * @return the instruction
    */
   public static Instruction getInstruction(Class<?> instructionClass, List<String> arguments) {
@@ -35,34 +41,34 @@ public abstract class InstructionFactory {
     String[] argumentsList = arguments.toArray(new String[argumentLen]);
 
     // Create an array of the correct parameter types
-    Object[] parameterObjs = new Object[argumentLen];
+    Object[] parameterObjects = new Object[argumentLen];
     // Get the constructor parameters
     Class<?>[] parameterTypes = classConstructors[0].getParameterTypes();
     for (int i = 0; i < argumentLen; i++) {
-      // Wrap the parameter types and store in parameterObjs
-      parameterObjs[i] = toWrapper(parameterTypes[i]);
+      // Wrap the parameter types and store in parameterObjects
+      parameterObjects[i] = toWrapper(parameterTypes[i]);
     }
 
     // Convert the arguments to the correct type, i.e. arguments to parameters
     for (int j = 0; j < argumentLen; j++) {
-      if (parameterObjs[j].equals(Integer.class)) {
+      if (parameterObjects[j].equals(Integer.class)) {
         try {
-          parameterObjs[j] = Integer.parseInt(argumentsList[j]);
+          parameterObjects[j] = Integer.parseInt(argumentsList[j]);
         } catch (NumberFormatException e) {
           throw new RuntimeException(argumentsList[j] + " is not a valid integer");
         }
-      } else if (parameterObjs[j].equals(RegisterName.class)) {
+      } else if (parameterObjects[j].equals(RegisterName.class)) {
         try {
-          parameterObjs[j] = Registers.Register.valueOf(argumentsList[j]);
+          parameterObjects[j] = Registers.Register.valueOf(argumentsList[j]);
         } catch (IllegalArgumentException e) {
           throw new RuntimeException(argumentsList[j] + " is not a valid register");
         }
       } else {
-        parameterObjs[j] = argumentsList[j];
+        parameterObjects[j] = argumentsList[j];
       }
     }
     try {
-      return (Instruction) Constructor.newInstance(parameterObjs);
+      return (Instruction) Constructor.newInstance(parameterObjects);
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(e + "Constructor failed");
     }
